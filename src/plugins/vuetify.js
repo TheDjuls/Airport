@@ -10,21 +10,6 @@ const vuetify = createVuetify({
     icons: {
       defaultSet: 'mdi',
     },
-    theme: {
-      themes: {
-        light: {
-          dark: false,
-          colors: {
-            primary: "#DA983C",
-            secondary: "#3E5641",
-            error: '#A24936',
-            info: '#83BCA9',
-            success: '#82D173',
-            warning: '#DBFF76',
-          }
-        },
-      },
-    },
   })
   
 export default vuetify
