@@ -13,6 +13,7 @@ BEGIN
 
 select
 	json_agg(json_build_object(
+	'horaSalida', (select v."horaSalida" from vuelos v, ordenes o2 where o2."idVuelo" = v.id  and o2.id = o.id ),
             'orden',
 	o.*,
 	'vigente',
