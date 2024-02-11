@@ -34,9 +34,12 @@ const getSeats = async (idAvion, idTipoAsiento, idVuelo) => {
 }
 
 const bookaFly = async (idVuelo, idUsuario) => {
+    const zonaHoraria = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    // Crear un objeto Date con tu zona horaria local
+    const fechaConZonaHoraria = new Date().toLocaleString("en-US", { timeZone: zonaHoraria });
     const { data, error } = await supabase
         .from('ordenes')
-        .insert({ fechaOrden: new Date(), idVuelo, idUsuario })
+        .insert({ fechaOrden: fechaConZonaHoraria, idVuelo, idUsuario })
         .select()
     if (!error && data.length > 0) {
         return data[0].id
@@ -69,11 +72,37 @@ const confirmFly = async (idOrden) => {
     return false
 }
 
+const getOrdersListByUser = async (idUsuario) => {
+    const { data, error } = await supabase.rpc('listorders', {
+        pidusuario: idUsuario
+    });
+    if (!error && data.length > 0) {
+        return data[0].resultado1 != null ? data[0].resultado1 : []
+    }
+    return []
+}
+
+const cancelOrder = async (idOrden) => {
+    const zonaHoraria = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const fechaConZonaHoraria = new Date().toLocaleString("en-US", { timeZone: zonaHoraria });
+    
+    const { error } = await supabase
+        .from('ordenes')
+        .update({ fechaCancelacion: fechaConZonaHoraria })
+        .eq('id', idOrden)
+    if (!error) {
+        return true
+    }
+    return false
+}
+
 export {
     searchFlies,
     getFly,
     getSeats,
     bookaFly,
     bookSeats,
-    confirmFly
+    confirmFly,
+    getOrdersListByUser,
+    cancelOrder
 }

@@ -95,6 +95,7 @@ export default {
         }
         const closeModal = async () => {
                 openModal.value = false
+                emitter.emit("getListOrders")
         }
         const cancelPay = async () => {
             if(confirm("Deseas cancelar el pago?")){
