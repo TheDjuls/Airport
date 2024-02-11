@@ -3,28 +3,35 @@
         <div id="searchBar">
             <v-row id="rowContainer">
                 <v-col cols="3">
-                    <v-autocomplete variant="outlined" label="Origen" :items="listAirports" item-title="ciudad" item-value="id"></v-autocomplete>
+                    <v-autocomplete variant="outlined" label="Origen" v-model="payloadBusqueda.origen" :items="listAirports"
+                        item-title="ciudad" item-value="id"></v-autocomplete>
                 </v-col>
                 <v-col cols="3">
-                    <v-autocomplete variant="outlined" label="Destino" :items="listAirports" item-title="ciudad" item-value="id"></v-autocomplete>
+                    <v-autocomplete variant="outlined" label="Destino" v-model="payloadBusqueda.destino"
+                        :items="listAirports" item-title="ciudad" item-value="id"></v-autocomplete>
                 </v-col>
                 <v-col cols="3">
-                    <v-autocomplete variant="outlined" label="Aerolinea" :items="listCompanys" item-title="nombreAerolinea" item-value="id"></v-autocomplete>
+                    <v-autocomplete variant="outlined" label="Aerolinea" v-model="payloadBusqueda.aerolinea"
+                        :items="listCompanys" item-title="nombreAerolinea" item-value="id"></v-autocomplete>
                 </v-col>
                 <v-col cols="2">
-                    <datepicker id="dateSelector" placeholder="Fecha Salida"></datepicker>
+                    <datepicker id="dateSelector" v-model="payloadBusqueda.fecha" placeholder="Fecha Salida"></datepicker>
                 </v-col>
-                <v-col cols="1">
-                    <v-btn density="default" color="primary" icon="mdi-magnify"></v-btn>
+                <v-col cols="1" class="d-flex flex-row justify-center items-center">
+                    <v-btn density="default" color="primary" icon="mdi-magnify" @click="searchFliesAction()"></v-btn>
+                    <v-btn density="default" class="mx-1" color="error" icon="mdi-close" @click="clearSearch()"></v-btn>
                 </v-col>
             </v-row>
         </div>
     </div>
 </template>
 <script>
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, ref, reactive } from 'vue';
 import Datepicker from 'vuejs3-datepicker';
 import { getAirports, getAirlines } from '@/services/mainpage.js'
+import { getSession } from '@/util/session.js'
+import { searchFlies } from '@/services/listFlies.js'
+import { useFliesStore } from '@/stores/flies'
 
 export default {
     components: {
@@ -32,15 +39,46 @@ export default {
     },
     setup() {
         //variables
+        const fliesStore = useFliesStore();
         const listAirports = ref([])
         const listCompanys = ref([])
+        let payloadBusqueda = reactive({
+            origen: 6,
+            destino: null,
+            aerolinea: null,
+            fecha: null
+        })
         //methods
 
+        const clearSearch = () => {
+            if (confirm("¿Está seguro de borrar la busqueda?")) {
+                payloadBusqueda.origen = 6;
+                payloadBusqueda.destino = null;
+                payloadBusqueda.aerolinea = null;
+                payloadBusqueda.fecha = null;
+                fliesStore.setListFlies([])
+            }
+
+        }
+
         const getCatalogs = async () => {
-            const [dataAirports, dataAirlines] = await Promise.all([getAirports(),getAirlines() ]);
-            console.log(dataAirlines, dataAirports)
+            const [dataAirports, dataAirlines] = await Promise.all([getAirports(), getAirlines()]);
             listAirports.value = dataAirports
             listCompanys.value = dataAirlines
+        }
+
+        const searchFliesAction = async () => {
+            if (getSession() != null) {
+                if (payloadBusqueda.fecha != null) {
+                    const listFlies = await searchFlies(payloadBusqueda)
+                    fliesStore.setListFlies(listFlies)
+                    console.log(fliesStore.listFlies)
+                } else {
+                    alert("Indique una fecha de vuelo")
+                }
+            } else {
+                alert("Debe Iniciar Sesión")
+            }
         }
 
         //lifecycle
@@ -49,8 +87,11 @@ export default {
         });
 
         return {
+            clearSearch,
+            searchFliesAction,
             listAirports,
-            listCompanys
+            listCompanys,
+            payloadBusqueda
         }
     }
 }
