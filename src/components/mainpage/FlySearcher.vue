@@ -32,6 +32,7 @@ import { getAirports, getAirlines } from '@/services/mainpage.js'
 import { getSession } from '@/util/session.js'
 import { searchFlies } from '@/services/listFlies.js'
 import { useFliesStore } from '@/stores/flies'
+import moment from 'moment';
 
 export default {
     components: {
@@ -67,10 +68,13 @@ export default {
             listCompanys.value = dataAirlines
         }
 
+       
+
         const searchFliesAction = async () => {
             if (getSession() != null) {
                 if (payloadBusqueda.fecha != null) {
-                    const listFlies = await searchFlies(payloadBusqueda)
+                    let listFlies = await searchFlies(payloadBusqueda)
+                    listFlies = listFlies.sort((a, b) => moment(a.vuelo.horaSalida) - moment(b.vuelo.horaSalida));
                     fliesStore.setListFlies(listFlies)
                     console.log(fliesStore.listFlies)
                 } else {

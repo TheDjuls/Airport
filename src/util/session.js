@@ -15,8 +15,16 @@ const getIdUserLogged = () => {
     }
 }
 
+const getTypeUserLogged = () => {
+    const session = JSON.parse(localStorage.getItem("sessionUser"));
+    if(session){
+        return session.idTipoUsuario;
+    }
+}
+
 
 export {
     getSession,
-    getIdUserLogged
+    getIdUserLogged,
+    getTypeUserLogged
 }

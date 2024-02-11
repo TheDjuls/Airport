@@ -38,7 +38,7 @@
                                     <div class="horarioContainer d-flex flex-column justify-center align-center">
                                         <div class="text-caption">Tarifa Basica</div>
                                         <div class="text-h6">$ {{ item.raw.vuelo.precioBase.toFixed(2) }} </div>
-                                        <v-btn color="primary" variant="outlined" density="compact" @click="selectFly(item.raw)">
+                                        <v-btn :disabled="isSelectable(item.raw)" color="primary" variant="outlined" density="compact" @click="selectFly(item.raw)">
                                             Seleccionar
                                         </v-btn>
                                     </div>
@@ -56,6 +56,7 @@ import { onBeforeMount, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useFliesStore } from '@/stores/flies'
 import { getHourTimeStamp, addTimeToADate } from '@/util/dates.js'
+import moment from 'moment';
 export default {
     setup() {
         //variables
@@ -65,8 +66,19 @@ export default {
         //methods
 
         const selectFly = (vueloInf) => {
-            console.log(vueloInf)
             router.push({name:'configFly', params:{idVuelo:vueloInf.vuelo.id}})
+        }
+
+        const isSelectable = (vueloInf) => {
+            const ahora = moment();
+            const horaVuelo = moment(vueloInf.vuelo.horaSalida)
+            const diferencia = moment.duration(horaVuelo.diff(ahora));
+            const horasFaltantes = Math.ceil(diferencia.asHours());
+            console.log(horasFaltantes)
+            if(horasFaltantes > 3){
+                return false
+            }
+            return true
         }
 
         //lifecycle
@@ -75,6 +87,7 @@ export default {
         });
 
         return {
+            isSelectable,
             selectFly,
             addTimeToADate,
             getHourTimeStamp,

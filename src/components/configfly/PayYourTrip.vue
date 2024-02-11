@@ -22,10 +22,10 @@
             <template v-slot:actions>
                 <div class="text-h6">Total: ${{ getTotalOrden }}</div>
                 <v-spacer></v-spacer>
-                <v-btn variant="outlined" :disabled="!(fliesStore.seatsSelected.length>0)" @click="bookYourFly">
+                <v-btn variant="outlined" :disabled="bookDisabled"  @click="bookYourFly">
                     Reservar
                 </v-btn>
-                <v-btn variant="outlined" :disabled="!fliesStore.seatsSelected.length>0" @click="confirmFly">
+                <v-btn variant="outlined" :disabled="bookDisabled"  @click="confirmFly">
                     Reservar y Confirmar
                 </v-btn>
             </template>
@@ -36,7 +36,7 @@
 import { computed } from 'vue'
 import { useFliesStore } from '@/stores/flies'
 import { bookaFly, bookSeats } from '@/services/listFlies.js'
-import { getIdUserLogged } from '@/util/session.js'
+import { getIdUserLogged,getTypeUserLogged } from '@/util/session.js'
 import emitter from '@/plugins/mitt';
 export default {
     setup() {
@@ -92,12 +92,25 @@ export default {
             return total.toFixed(2);
         });
 
+        const bookDisabled = computed(() => {
+
+            if(fliesStore.seatsSelected.length > 0){
+                if(getTypeUserLogged() == 1){
+                    return true
+                }
+                return false
+            }
+            return true;
+        });
+
         return {
             bookYourFly,
             fliesStore,
             getTotalOrden,
             getNumberSeatPerOrden,
-            confirmFly
+            confirmFly,
+            getTypeUserLogged,
+            bookDisabled
         }
     }
 }

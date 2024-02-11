@@ -11,26 +11,27 @@
                 <v-list>
 
                     <v-list-item>
-                        <v-text-field @blur="validate" density="compact" variant="outlined" label="Correo" single-line
-                            hide-details v-model="userPayload.correo" :rules="[errors.correo]"></v-text-field>
+                        <v-text-field density="compact" variant="outlined" label="Correo" 
+                        single-line hide-details
+                         v-model="userPayload.correo" :rules="[errors.correo]"></v-text-field>
                     </v-list-item>
 
                     <v-list-item>
-                        <v-text-field @blur="validate" density="compact" variant="outlined" label="Password" type="password"
+                        <v-text-field density="compact" variant="outlined" label="Password" type="password"
                             single-line hide-details v-model="userPayload.password"
                             :rules="[errors.password]"></v-text-field>
                     </v-list-item>
                     <v-list-item v-if="isNewRegister">
-                        <v-text-field @blur="validate" density="compact" variant="outlined" label="Nombre" single-line
+                        <v-text-field  density="compact" variant="outlined" label="Nombre" single-line
                             hide-details v-model="userPayload.nombre" :rules="[errors.nombre]"></v-text-field>
                     </v-list-item>
                     <v-list-item v-if="isNewRegister">
-                        <v-text-field @blur="validate" density="compact" variant="outlined" label="Apellido Paterno"
+                        <v-text-field  density="compact" variant="outlined" label="Apellido Paterno"
                             single-line hide-details v-model="userPayload.apellidoPaterno"
                             :rules="[errors.apellidoPaterno]"></v-text-field>
                     </v-list-item>
                     <v-list-item v-if="isNewRegister">
-                        <v-text-field @blur="validate" density="compact" variant="outlined" label="Apellido Materno"
+                        <v-text-field  density="compact" variant="outlined" label="Apellido Materno"
                             single-line hide-details v-model="userPayload.apellidoMaterno"
                             :rules="[errors.apellidoMaterno]"></v-text-field>
                     </v-list-item>
@@ -74,6 +75,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { email, required, minLength, maxLength, requiredIf } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
+import { useRouter } from 'vue-router';
 import {
     saveUser,
     savePerson,
@@ -83,6 +85,7 @@ import {
 export default {
     setup() {
         //variables
+        const router = useRouter();
         const usuarioLogged = ref(null)
         const menu = ref(false)
         const isNewRegister = ref(false)
@@ -128,6 +131,7 @@ export default {
         const logout = () => {
             localStorage.clear()
             usuarioLogged.value = null
+            router.go('/')
         }
 
 
