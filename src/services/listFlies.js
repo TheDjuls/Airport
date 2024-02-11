@@ -22,7 +22,18 @@ const getFly = async (id) => {
     return []
 }
 
+const getSeats = async (idAvion, idTipoAsiento) => {
+    const { data, error } = await supabase.rpc('searchseats', {
+        pidavion: idAvion, pidtipo: idTipoAsiento
+    });
+    if (!error && data.length > 0) {
+        return data[0].resultado1 != null ? data[0].resultado1 : []
+    }
+    return []
+}
+
 export {
     searchFlies,
-    getFly
+    getFly,
+    getSeats
 }

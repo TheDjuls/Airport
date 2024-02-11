@@ -31,6 +31,8 @@ export default {
         const typeTicket = ref(null)
 
         const SelectTypeOfFly = () => {
+            fliesStore.setTypeSeatSeach(typeTicket.value)
+            fliesStore.setPriceSelected(getPriceTicket.value)
             emitter.emit("chargePlaneSeats")
         }
 
