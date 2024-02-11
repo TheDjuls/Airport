@@ -14,17 +14,20 @@
 <script>
 import LoginMenu from './LoginMenu.vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useFliesStore } from '@/stores/flies'
 export default {
     components: {
         LoginMenu
     },
     setup(){
+        const fliesStore = useFliesStore();
         const route = useRoute();
         const router = useRouter();
 
 
         //methods
         const navigateBack = () => {
+            fliesStore.setSeatsSelected([])
             router.back()
         }
 
