@@ -2,10 +2,12 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Inicio from './../views/MainPage.vue'
 
 const ConfigFlyView = () => import('./../views/ConfigFly.vue')
+const MyOrders = () => import('./../views/MyOrders.vue')
 
 const routes = [
     { path: '/', name: 'inicio', component: Inicio },
     { path: '/configYourFly/:idVuelo', name: 'configFly', component: ConfigFlyView },
+    { path: '/myOrders', name: 'myOrders', component: MyOrders },
 ]
 
 const router = createRouter({

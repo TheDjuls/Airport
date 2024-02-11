@@ -16,8 +16,6 @@
                     v-if="(index + 1) % seatsPerRow === 2 && index !== listadoAsientos.length - 1"></div>
             </div>
         </div>
-        {{ fliesStore.seatsSelected }}
-        {{ fliesStore.priceSelected }}
     </div>
 </template>
 <script>
@@ -33,7 +31,7 @@ export default {
         const listadoAsientos = ref([])
 
         const chargePlaneSeats = async () => {
-            const listSeats = await getSeats(fliesStore.flyInfo.vuelo.idAvion, fliesStore.typeSeatSeach)
+            const listSeats = await getSeats(fliesStore.flyInfo.vuelo.idAvion, fliesStore.typeSeatSeach, fliesStore.flyInfo.vuelo.id)
             console.log(listSeats)
             listadoAsientos.value = listSeats
         }

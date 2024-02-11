@@ -50,13 +50,19 @@
 
             <v-card v-else min-width="300">
                 <v-list>
-                    <v-list-item prepend-avatar="https://cdn.vuetifyjs.com/images/john.jpg" 
-                    :title="(`${usuarioLogged.nombre} ${usuarioLogged.apellidoPaterno} ${usuarioLogged.apellidoMaterno}`)"
-                        :subtitle="usuarioLogged.idTipoUsuario!=1 ? 'Premium' : 'Basico'">
+                    <v-list-item prepend-avatar="https://cdn.vuetifyjs.com/images/john.jpg"
+                        :title="(`${usuarioLogged.nombre} ${usuarioLogged.apellidoPaterno} ${usuarioLogged.apellidoMaterno}`)"
+                        :subtitle="usuarioLogged.idTipoUsuario != 1 ? 'Premium' : 'Basico'">
                         <template v-slot:append>
-                            <v-btn variant="text" icon="mdi-logout"
-                                @click="logout"></v-btn>
+                            <v-btn variant="text" icon="mdi-logout" @click="logout"></v-btn>
                         </template>
+                    </v-list-item>
+                    <v-list-item to="/myOrders" class="cursor-pointer">
+                        <template v-slot:prepend>
+                            <v-icon icon="mdi-note"></v-icon>
+                        </template>
+
+                        <v-list-item-title > Mis Ordenes</v-list-item-title>
                     </v-list-item>
                 </v-list>
 
@@ -124,9 +130,10 @@ export default {
             usuarioLogged.value = null
         }
 
+
         const updateDataSession = () => {
             usuarioLogged.value = { ...JSON.parse(localStorage.getItem("sessionPerson")), ...JSON.parse(localStorage.getItem("sessionUser")) }
-            if(Object.keys(usuarioLogged.value).length === 0){
+            if (Object.keys(usuarioLogged.value).length === 0) {
                 usuarioLogged.value = null
             }
         }
@@ -139,13 +146,13 @@ export default {
 
         const login = () => {
             getUserPerson(userPayload.correo, userPayload.password).then((data) => {
-               if(data.length > 0){
-                setSession(data[0], data[0].personas[0])
-                closeModal()
-               }
-               else{
-                alert("Usuario o contraseña incorrecta")
-               }
+                if (data.length > 0) {
+                    setSession(data[0], data[0].personas[0])
+                    closeModal()
+                }
+                else {
+                    alert("Usuario o contraseña incorrecta")
+                }
             }).catch((error) => { console.log(error) })
         }
 

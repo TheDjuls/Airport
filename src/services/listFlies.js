@@ -1,5 +1,6 @@
 import { supabase } from '@/plugins/supabase';
 import { getDateTimeStamp } from '@/util/dates.js'
+import { v4 as uuidv4 } from 'uuid';
 
 const searchFlies = async (payloadBusqueda) => {
     const { data, error } = await supabase.rpc('searchflies', {
@@ -22,9 +23,9 @@ const getFly = async (id) => {
     return []
 }
 
-const getSeats = async (idAvion, idTipoAsiento) => {
+const getSeats = async (idAvion, idTipoAsiento, idVuelo) => {
     const { data, error } = await supabase.rpc('searchseats', {
-        pidavion: idAvion, pidtipo: idTipoAsiento
+        pidavion: idAvion, pidtipo: idTipoAsiento, pidvuelo: idVuelo
     });
     if (!error && data.length > 0) {
         return data[0].resultado1 != null ? data[0].resultado1 : []
@@ -32,8 +33,47 @@ const getSeats = async (idAvion, idTipoAsiento) => {
     return []
 }
 
+const bookaFly = async (idVuelo, idUsuario) => {
+    const { data, error } = await supabase
+        .from('ordenes')
+        .insert({ fechaOrden: new Date(), idVuelo, idUsuario })
+        .select()
+    if (!error && data.length > 0) {
+        return data[0].id
+    }
+    return null
+}
+
+const bookSeats = async (idOrden, idAsiento) => {
+    const { error } = await supabase
+        .from('ordenes_asientos')
+        .insert({ idOrden, idAsiento })
+    if (!error) {
+        return true
+    }
+    return false
+}
+
+const confirmFly = async (idOrden) => {
+    const uuid = uuidv4();
+    // Tomar los primeros 10 caracteres del UUID y eliminar los guiones
+    const folio = uuid.substr(0, 10).replace(/-/g, '').padEnd(10, '0');
+
+    const { error } = await supabase
+        .from('ordenes')
+        .update({ fechaConfirmacion: new Date(), folioConfirmacion: folio })
+        .eq('id', idOrden)
+    if (!error) {
+        return folio
+    }
+    return false
+}
+
 export {
     searchFlies,
     getFly,
-    getSeats
+    getSeats,
+    bookaFly,
+    bookSeats,
+    confirmFly
 }

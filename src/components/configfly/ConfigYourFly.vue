@@ -10,19 +10,22 @@
                     <br>
                     <SelectTypeOfFly />
                     <br>
-                    <SelectTypeOfFly />
+                    <PayYourTrip />
                 </v-col>
             </v-row>
         </v-col>
+        <ConfirmPay />
     </v-container>
 </template>
 <script>
+import ConfirmPay from './ConfirmPay.vue';
 import FlyInfo from './FlyInfo.vue';
+import PayYourTrip from './PayYourTrip.vue';
 import SelectSeats from './SelectSeats.vue';
 import SelectTypeOfFly from './SelectTypeOfFly.vue';
 
 export default {
-    components: { FlyInfo, SelectTypeOfFly, SelectSeats }
+    components: { FlyInfo, SelectTypeOfFly, SelectSeats, PayYourTrip, ConfirmPay }
 }
 </script>
 <style>

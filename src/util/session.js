@@ -8,7 +8,15 @@ const getSession = () => {
     return existSesion
 }
 
+const getIdUserLogged = () => {
+    const session = JSON.parse(localStorage.getItem("sessionUser"));
+    if(session){
+        return session.id;
+    }
+}
+
 
 export {
-    getSession
+    getSession,
+    getIdUserLogged
 }

@@ -1,6 +1,6 @@
 -- DROP FUNCTION public.searchseats(int4, int4);
 
-CREATE OR REPLACE FUNCTION public.searchseats(pidavion integer, pidtipo integer)
+CREATE OR REPLACE FUNCTION public.searchseats(pidavion integer, pidtipo integer, pidvuelo integer)
  RETURNS TABLE(resultado1 json)
  LANGUAGE plpgsql
 AS $function$
@@ -14,7 +14,7 @@ SELECT json_agg(
             'ocupado', (select COUNT(*) as ocupado from ordenes_asientos oa, ordenes o  where oa."idOrden" = o.id and 
             o."fechafinalizacion" is null
             and 
-            oa."idAsiento" = a.id )
+            oa."idAsiento" = a.id and o."idVuelo" = pidvuelo)
           )
        ) into json1
 from asientos a  where a."idAvion" = pidavion and a."idTipoAsiento" =pidtipo;

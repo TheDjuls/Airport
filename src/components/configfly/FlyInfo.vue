@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-card v-if="fliesStore.flyInfo.vuelo" variant="outlined" height="30vh" width="98%">
+        <v-card v-if="fliesStore.flyInfo.vuelo" variant="outlined" width="98%">
             <template v-slot:title>
                Numero de vuelo: # {{ fliesStore.flyInfo.vuelo.numeroVuelo }}
             </template>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-card variant="outlined" height="20vh" width="98%">
+        <v-card variant="outlined" width="98%">
             <template v-slot:title>
                 Categorias
             </template>
