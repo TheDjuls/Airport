@@ -15,7 +15,7 @@
                     Direccion Salida: {{fliesStore.flyInfo.aeropuertoOrigen.direccion  }}
                 </v-list-item>
                 <v-list-item>
-                    Direccion Salida: {{fliesStore.flyInfo.aeropuertoDestino.direccion  }}
+                    Direccion Llegada: {{fliesStore.flyInfo.aeropuertoDestino.direccion  }}
                 </v-list-item>
                 <v-list-item>
                     Aerolinea: {{fliesStore.flyInfo.aerolinea.nombreAerolinea  }}
