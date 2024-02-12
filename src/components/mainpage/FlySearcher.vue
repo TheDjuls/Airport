@@ -14,10 +14,12 @@
                     <v-autocomplete variant="outlined" label="Aerolinea" v-model="payloadBusqueda.aerolinea"
                         :items="listCompanys" item-title="nombreAerolinea" item-value="id"></v-autocomplete>
                 </v-col>
-                <v-col cols="2">
+                <v-col cols="3">
                     <datepicker id="dateSelector" v-model="payloadBusqueda.fecha" placeholder="Fecha Salida"></datepicker>
                 </v-col>
-                <v-col cols="1" class="d-flex flex-row justify-center items-center">
+            </v-row>
+            <v-row>
+                <v-col cols="12" class="d-flex flex-row justify-center items-center">
                     <v-btn density="default" color="primary" icon="mdi-magnify" @click="searchFliesAction()"></v-btn>
                     <v-btn density="default" class="mx-1" color="error" icon="mdi-close" @click="clearSearch()"></v-btn>
                 </v-col>
@@ -102,7 +104,7 @@ export default {
 </script>
 <style>
 #rowContainer {
-    height: 20vh;
+    height: 10vh;
 }
 
 .vuejs3-datepicker {
@@ -122,5 +124,6 @@ export default {
     display: flex;
     justify-content: space-around;
     align-items: center;
+    flex-direction: column;
 }
 </style>
